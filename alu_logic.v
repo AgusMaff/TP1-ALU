@@ -7,7 +7,7 @@ module alu_logic#(
     input [OPERAND_SIZE-1:0]dato_a,
     input [OPERAND_SIZE-1:0]dato_b,
     input [OP_CODE_SIZE-1:0]op_code,
-    output reg [OPERAND_SIZE:0]o_resultado
+    output reg [OPERAND_SIZE-1:0]o_resultado
 );
     localparam OP_ADD = 6'b100000;
     localparam OP_SUB = 6'b100010;
@@ -17,27 +17,32 @@ module alu_logic#(
     localparam OP_SRA = 6'b000011;
     localparam OP_SRL = 6'b000010;
     localparam OP_NOR = 6'b100111;
-    
+    localparam OP_RESET = 6'b000000;
+
+    reg [OPERAND_SIZE-1:0] resultado = 8'b00000000;
+    assign o_resultado=resultado; 
     
     always @(*)
     begin
             case(op_code)
                 OP_ADD:
-                    o_resultado = dato_a + dato_b;
+                    resultado = dato_a + dato_b;
                 OP_SUB:
-                    o_resultado = dato_a - dato_b;
+                    resultado = dato_a - dato_b;
                 OP_AND:
-                    o_resultado = dato_a & dato_b;
+                    resultado = dato_a & dato_b;
                 OP_OR:
-                    o_resultado = dato_a | dato_b;
+                    resultado = dato_a | dato_b;
                 OP_XOR:
-                    o_resultado = dato_a ^ dato_b;
+                    resultado = dato_a ^ dato_b;
                 OP_SRA:
-                    o_resultado = dato_a >> 1;
+                    resultado = dato_a >> 1;
                 OP_SRL:
-                    o_resultado = dato_a >>> 1;
+                    resultado = dato_a >>> 1;
                 OP_NOR:
-                    o_resultado = ~(dato_a | dato_b);
+                    resultado = ~(dato_a | dato_b);
+                OP_RESET:
+                    resultado = 8'b00000000;
             endcase
     end
 endmodule
